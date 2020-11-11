@@ -168,7 +168,10 @@ napi_value serial_open(napi_env env, napi_callback_info info) {
     napi_throw_error(env, NULL, "failed to open");
     return ret_dummy;
   }
-  set_interface_attribs(fd, termios_baud_rate, 0);
+  if (0 != set_interface_attribs(fd, termios_baud_rate, 0)) {
+    napi_throw_error(env, NULL, "set_interface_attribs failed");
+    return ret_dummy;
+  }
   tcflush(fd, TCIFLUSH);
   tcflush(fd, TCOFLUSH);
   
